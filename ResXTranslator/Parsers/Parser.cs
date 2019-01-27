@@ -18,7 +18,7 @@ namespace ResXTranslator.Parsers
                     {
                         Console.WriteLine(item.Tag.ToString());
                     }
-                    Environment.Exit(0);
+                    Environment.Exit(-1);
                 })
                 .WithParsed(o =>
                 {
@@ -27,20 +27,21 @@ namespace ResXTranslator.Parsers
                         if (!File.Exists(o.FilePath))
                         {
                             Console.WriteLine("The file path precised for this resource doesn't exist.");
-                            Environment.Exit(0);
+                            Environment.Exit(-1);
                         }
                         if (string.IsNullOrEmpty(o.OutPutPath))
                             o.OutPutPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                         if (!Directory.Exists(o.OutPutPath))
                         {
                             Console.WriteLine("The output directory precised doesn't exist.");
-                            Environment.Exit(0);
+                            Environment.Exit(-1);
                         }
                         func(o);
                     }
                     catch (Exception e)
                     {
                         Console.WriteLine(e.Message);
+                        Environment.Exit(-1);
                     }
                 });
         }

@@ -8,8 +8,6 @@ namespace ResXTranslator.TranslationServices
     public interface ITranslator
     {
         Task<string> Translate(string text, string language);
-        Task<string> Translate(string text);
         Task<IEnumerable<string>> Translate(IEnumerable<string> texts, string language);
-        Task<IEnumerable<string>> Translate(IEnumerable<string> texts);
     }
 }
