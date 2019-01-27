@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ResXTranslator.Parsers
 {
-    public class CLIParser
+    public class CLIOptions
     {
         /// <summary>
         /// The path to the resx file you wish to translate.
