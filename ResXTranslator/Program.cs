@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Google.Apis.Auth.OAuth2;
+using Google.Cloud.Translation.V2;
+using System;
 
 namespace ResXTranslator
 {
@@ -6,7 +8,12 @@ namespace ResXTranslator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var credential = GoogleCredential.FromFile("APIKey.json");
+            TranslationClient client = TranslationClient.Create(credential);
+            TranslationResult result = client.TranslateText("It is raining.", LanguageCodes.French);
+            Console.WriteLine($"Result: {result.TranslatedText}; detected language {result.DetectedSourceLanguage}");
+            Console.ReadKey();
+
         }
     }
 }
