@@ -24,5 +24,11 @@ namespace ResXTranslator.Parsers
         /// </summary>
         [Option('l', "language", HelpText = "The language of your current resource file.")]
         public string ResourceLanguage { get; set; }
+
+        /// <summary>
+        /// Path where your Resx will be created. The default path is in your documents folder.
+        /// </summary>
+        [Option('p', "output", HelpText = "Path where your Resx will be created. The default path is in your documents folder.")]
+        public string OutPutPath { get; set; }
     }
 }
