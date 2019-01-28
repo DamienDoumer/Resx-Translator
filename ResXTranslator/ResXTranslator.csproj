@@ -121,6 +121,7 @@
     <Compile Include="TranslationServices\ITranslator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="APIKey.json" />
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>

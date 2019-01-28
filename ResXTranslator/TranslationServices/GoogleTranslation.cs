@@ -13,8 +13,8 @@ namespace ResXTranslator.TranslationServices
         TranslationClient _client;
         public GoogleTranslation()
         {
-            var credential = GoogleCredential.FromFile("APIKey.json");
-            TranslationClient _client = TranslationClient.Create(credential);
+            var credential = GoogleCredential.FromFile(@".\APIKey.json");
+            _client = TranslationClient.Create(credential);
         }
 
         public async Task<string> Translate(string text, string language)
@@ -24,7 +24,7 @@ namespace ResXTranslator.TranslationServices
             {
                 Console.WriteLine($"Translating {text} to {language}");
                 Type type = typeof(LanguageCodes);
-                var langCode = type.GetFields(BindingFlags.Static | BindingFlags.NonPublic).Select(l => l.GetValue(null).ToString())
+                var langCode = type.GetFields(BindingFlags.Static | BindingFlags.Public).Select(l => l.GetValue(null).ToString())
                     .Where(lge => language == lge);
                 if (!langCode.Any())
                 {
@@ -49,7 +49,7 @@ namespace ResXTranslator.TranslationServices
             foreach (var t in  texts)
             {
                 var res = await Translate(t, language);
-                translations.Add(t);
+                translations.Add(res);
             }
             return translations;
         }

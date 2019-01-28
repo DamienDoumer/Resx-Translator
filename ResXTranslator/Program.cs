@@ -30,7 +30,7 @@ namespace ResxTranslator
             {
                 var res = await translator.Translate(new List<string>(words), lge);
                 var dic = new Dictionary<string, string>();
-                var outputFile = $"{Path.GetFileName(options.FilePath)}-{lge}.{Path.GetExtension(options.FilePath)}";
+                var outputFile = $"{Path.GetFileNameWithoutExtension(options.FilePath)}-{lge}{Path.GetExtension(options.FilePath)}";
                 for (int i = 0; i < res.Count(); i++)
                 {
                     dic.Add(resources.Keys.ElementAt(i), res.ElementAt(i));
