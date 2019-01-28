@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Resources;
 using System.IO;
+using System.Collections;
 
 namespace ResXTranslator.ResxHandler
 {
@@ -13,25 +14,24 @@ namespace ResXTranslator.ResxHandler
             if (path == null)
                 path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            foreach (var kv in keyValuePairs)
+            using (ResXResourceWriter resx = new ResXResourceWriter(Path.Combine(path, fileName)))
             {
-                using (ResourceWriter resx = new ResourceWriter(Path.Combine(path, fileName)))
+                foreach (var kv in keyValuePairs)
                 {
                     resx.AddResource(kv.Key, kv.Value);
                 }
             }
         }
-         
+
         public Dictionary<string, string> Read(string path)
         {
             var resources = new Dictionary<string, string>();
-            using (ResourceReader reader = new ResourceReader(path))
+            using (ResXResourceReader reader = new ResXResourceReader(path))
             {
-                do
+                foreach (DictionaryEntry item in reader)
                 {
-                    resources.Add((reader.GetEnumerator().Key as string), (reader.GetEnumerator().Value as string));
+                    resources.Add(item.Key.ToString(), item.Value.ToString());
                 }
-                while (reader.GetEnumerator().MoveNext());
             }
 
             return resources;

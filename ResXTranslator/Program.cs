@@ -1,22 +1,24 @@
-﻿using Google.Apis.Auth.OAuth2;
-using Google.Cloud.Translation.V2;
 using ResXTranslator.Parsers;
 using ResXTranslator.ResxHandler;
 using ResXTranslator.TranslationServices;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Resources;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ResXTranslator
+namespace ResxTranslator
 {
     class Program
     {
         static void Main(string[] args)
         {
             CLIParser.Parse(new List<string>(args), Run);
+            Console.ReadKey();
         }
-
         static async void Run(CLIOptions options)
         {
             IResxHandler resxHandler = new SimpleResxHandler();
