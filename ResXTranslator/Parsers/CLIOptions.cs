@@ -30,5 +30,9 @@ namespace ResXTranslator.Parsers
         /// </summary>
         [Option('p', "output", HelpText = "Path where your Resx will be created. The default path is in your documents folder.")]
         public string OutPutPath { get; set; }
+
+        [Option('k', "key", HelpText = "Google translation API Key.")]
+        public string APIKeyPath { get; set; }
+
     }
 }

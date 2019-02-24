@@ -22,13 +22,17 @@ namespace ResxTranslator
         static async void Run(CLIOptions options)
         {
             IResxHandler resxHandler = new SimpleResxHandler();
-            ITranslator translator = new GoogleTranslation();
+            ITranslator translator;
+            if (options.APIKeyPath == null)
+                translator = new GoogleTranslation();
+            else
+                translator = new GoogleTranslation(options.APIKeyPath);
 
             var resources = resxHandler.Read(options.FilePath);
             var words = resources.Select(kv => kv.Value);
             foreach (var lge in options.TranslationLanguages)
             {
-                var res = await translator.Translate(new List<string>(words), lge);
+                var res = await translator.TranslateAsync(new List<string>(words), lge);
                 var dic = new Dictionary<string, string>();
                 var outputFile = $"{Path.GetFileNameWithoutExtension(options.FilePath)}.{lge}{Path.GetExtension(options.FilePath)}";
                 for (int i = 0; i < res.Count(); i++)

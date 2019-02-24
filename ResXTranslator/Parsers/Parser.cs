@@ -29,13 +29,12 @@ namespace ResXTranslator.Parsers
                             Console.WriteLine("The file path precised for this resource doesn't exist.");
                             Environment.Exit(-1);
                         }
-                        if (string.IsNullOrEmpty(o.OutPutPath))
-                            o.OutPutPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                        if (!Directory.Exists(o.OutPutPath))
+                        if (string.IsNullOrEmpty(o.OutPutPath) || !Directory.Exists(o.OutPutPath))
                         {
-                            Console.WriteLine("The output directory precised doesn't exist.");
-                            Environment.Exit(-1);
+                            o.OutPutPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                            Console.WriteLine("The output directory precised doesn't exist. Translations will be created in your documents directory.");
                         }
+
                         func(o);
                     }
                     catch (Exception e)
