@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace ResxTranslator
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             CLIParser.Parse(new List<string>(args), Run);
             Console.ReadKey();

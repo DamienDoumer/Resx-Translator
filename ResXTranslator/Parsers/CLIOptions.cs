@@ -33,6 +33,5 @@ namespace ResXTranslator.Parsers
 
         [Option('k', "key", HelpText = "Google translation API Key.")]
         public string APIKeyPath { get; set; }
-
     }
 }
