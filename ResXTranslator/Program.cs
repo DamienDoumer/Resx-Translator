@@ -18,7 +18,7 @@ namespace ResxTranslator
         public static void Main(string[] args)
         {
             CLIParser.Parse(new List<string>(args), Run);
-            Console.ReadKey();
+            //Console.ReadKey();
         }
         static async void Run(CLIOptions options)
         {
