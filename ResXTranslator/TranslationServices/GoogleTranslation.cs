@@ -1,11 +1,11 @@
 ﻿using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Translation.V2;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
+using System;
 
 namespace ResXTranslator.TranslationServices
 {
@@ -18,7 +18,7 @@ namespace ResXTranslator.TranslationServices
             if (!File.Exists(path))
             {
                 Console.WriteLine("Api key not found.");
-                Environment.Exit(-1);
+                throw new FileNotFoundException($"File {path} was not found.");
             }
             var credential = GoogleCredential.FromFile(path);
             _client = TranslationClient.Create(credential);
