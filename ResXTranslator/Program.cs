@@ -18,8 +18,8 @@ namespace ResxTranslator
         public static void Main(string[] args)
         {
             CLIParser.Parse(new List<string>(args), Run);
-            //Console.ReadKey();
         }
+
         static async void Run(CLIOptions options)
         {
             IResxHandler resxHandler = new SimpleResxHandler();
