@@ -1,68 +1,66 @@
 ﻿using Google.Apis.Auth.OAuth2;
-using Google.Cloud.Translation.V2;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using System;
+using Google.Cloud.Translate.V3;
+using Google.Api.Gax.ResourceNames;
+using System.Diagnostics;
 
 namespace ResXTranslator.TranslationServices
 {
     public class GoogleTranslation : ITranslator
     {
-        TranslationClient _client;
+        TranslationServiceClient _client;
 
         public GoogleTranslation(string path)
         {
+            //Note: enforce the google credentials in env variables
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
             if (!File.Exists(path))
             {
-                Console.WriteLine("Api key not found.");
+                Debug.WriteLine("Api key not found.");
                 throw new FileNotFoundException($"File {path} was not found.");
             }
-            var credential = GoogleCredential.FromFile(path);
-            _client = TranslationClient.Create(credential);
+
+            _client = TranslationServiceClient.Create();
         }
 
         public GoogleTranslation()
         {
-            _client = TranslationClient.Create();
+            _client = TranslationServiceClient.Create();
         }
 
-        static object ListLanguages(string targetLanguageCode)
-        {
-            TranslationClient client = TranslationClient.Create();
-            foreach (var language in client.ListLanguages(targetLanguageCode))
-            {
-                Console.WriteLine("{0}\t{1}", language.Code, language.Name);
-            }
-            return 0;
-        }
         public async Task<string> TranslateAsync(string text, string language, string sourceLanguage = null)
         {
-            string translation = string.Empty;
+            string translationText = string.Empty;
             try
             {
-                Console.WriteLine($"Translating {text} to {language}");
-                Type type = typeof(LanguageCodes);
-                var langCode = type.GetFields(BindingFlags.Static | BindingFlags.Public).Select(l => l.GetValue(null).ToString())
-                    .Where(lge => language == lge);
-                if (!langCode.Any())
+                Debug.WriteLine($"Translating {text} to {language}");
+
+                var request = new TranslateTextRequest
                 {
-                    Console.WriteLine("The language code you entered could not be handled.");
-                    Environment.Exit(-1);
-                }
-                var result = await _client.TranslateTextAsync(text, langCode.First(), sourceLanguage);
-                Console.WriteLine($"Translated {text} from {result.DetectedSourceLanguage} to {langCode.First()}");
-                translation = result.TranslatedText;
+                    Contents = { text },
+                    TargetLanguageCode = language,
+                    Parent = new ProjectName("//TODO: add project id here for this to work").ToString()
+                };
+                if (!string.IsNullOrEmpty(sourceLanguage))
+                    request.SourceLanguageCode = sourceLanguage;
+
+                var result = await _client.TranslateTextAsync(request);
+                var translation = result.Translations[0];
+                Debug.WriteLine($"Translated {text} from {translation.DetectedLanguageCode} to {language}");
+                translationText = translation.TranslatedText;
             }
             catch (Exception e)
             {
-                Console.WriteLine($"An error occured while translating. {e.Message}");
+                Debug.WriteLine($"An error occured while translating. {e.Message}");
                 Environment.Exit(-1);
             }
 
-            return translation;
+            return translationText;
         }
 
         public async Task<IEnumerable<string>> TranslateAsync(IEnumerable<string> texts, string language, string sourceLanguage = null)
