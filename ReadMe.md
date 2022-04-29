@@ -33,4 +33,4 @@ cp -R Release/lib/ /usr/local/lib/
 ```
 
 ### Example
-`./resx_translator -t hi,pt,fr,ru -f "../Strings/Resources.resx"  -p  "../Strings" -k secret_key.json`
+`resx_translator -t hi,pt,fr,ru -f "../Strings/Resources.resx"  -p  "../Strings" -k secret_key.json`
