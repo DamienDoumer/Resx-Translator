@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ResxTranslator
 {
@@ -12,10 +13,11 @@ namespace ResxTranslator
     {
         public static void Main(string[] args)
         {
-            CLIParser.Parse(new List<string>(args), Run);
+            Func<CLIOptions, Task> RunAction = async (options) => await Run(options);
+            CLIParser.Parse(new List<string>(args), RunAction);
         }
 
-        static async void Run(CLIOptions options)
+        static async Task Run(CLIOptions options)
         {
             IResxHandler resxHandler = new SimpleResxHandler();
             ITranslator translator;
@@ -44,7 +46,7 @@ namespace ResxTranslator
                     }
                 }
 
-                var translationResults = await translator.TranslateAsync(resources.Values, lge, options.ResourceLanguage);
+                var translationResults = await translator.TranslateAsync(resources.Values, lge, options.ResourceLanguage).ConfigureAwait(false);
                 for (int i = 0; i < translationResults.Count(); i++)
                 {
                     var key = resources.Keys.ElementAt(i);

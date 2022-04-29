@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace ResXTranslator.Parsers
 {
     public static class CLIParser
     {
-        public static void Parse(List<string> args, Action<CLIOptions> func)
+        public static void Parse(List<string> args, Func<CLIOptions, Task> func)
         {
             var options = Parser.Default.ParseArguments<CLIOptions>(args)
                 .WithNotParsed(err =>
@@ -45,7 +45,7 @@ namespace ResXTranslator.Parsers
                             o.APIKeyPath = Path.Combine(Environment.CurrentDirectory, o.APIKeyPath);
                         }
 
-                            func(o);
+                        func(o).GetAwaiter().GetResult();
                     }
                     catch (Exception e)
                     {
