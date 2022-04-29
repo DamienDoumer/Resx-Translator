@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using System;
+using System.Threading;
 
 namespace ResXTranslator.TranslationServices
 {
@@ -38,7 +39,9 @@ namespace ResXTranslator.TranslationServices
             }
             return 0;
         }
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<string> TranslateAsync(string text, string language, string sourceLanguage = null)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             string translation = string.Empty;
             try
@@ -52,9 +55,10 @@ namespace ResXTranslator.TranslationServices
                     Console.WriteLine("The language code you entered could not be handled.");
                     Environment.Exit(-1);
                 }
-                var result = await _client.TranslateTextAsync(text, langCode.First(), sourceLanguage);
+                var result = _client.TranslateText(text, langCode.First(), sourceLanguage);
                 Console.WriteLine($"Translated {text} from {result.DetectedSourceLanguage} to {langCode.First()}");
                 translation = result.TranslatedText;
+                Thread.Sleep(1000);
             }
             catch (Exception e)
             {
