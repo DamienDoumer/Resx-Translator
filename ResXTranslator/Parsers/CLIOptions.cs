@@ -33,5 +33,8 @@ namespace ResXTranslator.Parsers
 
         [Option('k', "key", HelpText = "Google translation API Key.")]
         public string APIKeyPath { get; set; }
+
+        [Option('e', "existing", HelpText = "If flag is present, then it will look for an existing translation and only update new occurances.", Max = 0)]
+        public bool UseExistingTranslation { get; set; }
     }
 }
