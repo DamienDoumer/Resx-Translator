@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using System;
+using System.Threading;
 
 namespace ResXTranslator.TranslationServices
 {
@@ -55,6 +56,7 @@ namespace ResXTranslator.TranslationServices
                 var result = await _client.TranslateTextAsync(text, langCode.First(), sourceLanguage);
                 Console.WriteLine($"Translated {text} from {result.DetectedSourceLanguage} to {langCode.First()}");
                 translation = result.TranslatedText;
+                await Task.Delay(1000).ConfigureAwait(false);
             }
             catch (Exception e)
             {
